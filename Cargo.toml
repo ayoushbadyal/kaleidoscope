@@ -1,0 +1,16 @@
+[package]
+name = "kaleidoscope-tut"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# docopt = "0.6"
+# llvm-sys = "*"
+# regex = "*"
+# regex_macros = "*"
+# rustc-serialize = "0.3"
+# 
+# [dependencies.iron_llvm]
+# git = "https://github.com/jauhien/iron-llvm.git"
