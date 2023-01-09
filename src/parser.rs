@@ -9,13 +9,20 @@ pub struct TokenIter {
 }
 
 impl Iterator for TokenIter {
-  type Item = Token;
+  type Item = TokenT;
   fn next(&mut self) -> Option<Self::Item> {
     // for now
-    match self.tok.next() {
-      Some(tok) => Some(tok.kind),
-      _ => None,
-    }
+    // match self.tok.next() {
+    //   Some(tok) => Some(tok.kind),
+    //   _ => None,
+    // }
+    self.tok.next()
+  }
+}
+
+impl From<TokenT> for Token {
+  fn from(tok: TokenT) -> Self {
+    tok.kind
   }
 }
 
@@ -255,7 +262,7 @@ impl<'a> Parser<'a> {
           body: Box::new(block),
         })
       }
-      kind => panic!("unexpected {:?}", (kind, &self.t)),
+      kind => panic!("unexpected {:?} at {:?}", kind, self.span()),
     };
     res
   }
@@ -293,7 +300,7 @@ impl<'a> Parser<'a> {
         }
       }
       t![var] | t![def] | t![extern] | t![if] | t![for] => self._stmt(),
-      kind => panic!("unexpected {:?}", (kind, &self.t)),
+      kind => panic!("unexpected {:?} at {:?}", kind, self.span()),
     };
     loop {
       let a = self.peek();
@@ -315,16 +322,31 @@ impl<'a> Parser<'a> {
     lhs
   }
 
+  pub fn kind(&mut self) -> Token {
+    self.t.peek().unwrap().clone().kind
+  }
+
+  pub fn span(&mut self) -> Span {
+    // location ..
+    self.t.peek().unwrap().clone().span
+  }
+
   fn at(&mut self, tok: Token) -> bool {
-    self.t.peek().unwrap_or(&t![EOF]).to_owned() == tok
+    self.kind() == tok
   }
 
   fn next(&mut self) -> Option<Token> {
-    self.t.next()
+    match self.t.next() {
+      Some(tok) => Some(tok.kind),
+      _ => None,
+    }
   }
 
   fn peek(&mut self) -> Token {
-    self.t.to_owned().peek().cloned().unwrap_or(t![EOF])
+    if !self.t.peek().is_some() {
+      return t![EOF];
+    }
+    self.t.to_owned().peek().unwrap().to_owned().into()
   }
 
   fn consume(&mut self, tok: Token) {

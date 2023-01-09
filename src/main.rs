@@ -6,6 +6,6 @@ mod token;
 use parser::*;
 
 fn main() {
-    let mut n = Parser::new(include_str!("stdlib.kl"));
-    let _ = n.file().iter().for_each(|x| println!("{}\n", x));
+  let mut n = Parser::new(include_str!("stdlib.kl"));
+  let _ = n.file().iter().for_each(|x| println!("{}\n", x));
 }
