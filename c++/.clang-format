@@ -1,0 +1,12 @@
+BasedOnStyle: Google
+
+IncludeBlocks: Merge
+IncludeCategories: [
+	# These headers must be included after <Windows.h>:
+	{Regex: '<delayimp\.h|pathcch\.h>', Priority: 1},
+	{Regex: '.*', Priority: 0}
+]
+SortIncludes: true
+
+FixNamespaceComments: false
+IndentCaseLabels: false
